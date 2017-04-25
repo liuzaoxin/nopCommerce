@@ -31,17 +31,9 @@ namespace Nop.Plugin.Payments.AliF2FPay
         //合作伙伴ID：partnerID
         public string Pid { get; set; }
 
-        //支付宝网关
-        public static string serverUrl = "https://openapi.alipay.com/gateway.do";
-        public static string mapiUrl = "https://mapi.alipay.com/gateway.do";
-        public static string monitorUrl = "http://mcloudmonitor.com/gateway.do";
-
-        //编码，无需修改
-        public static string charset = "utf-8";
-        //签名类型，支持RSA2（推荐！）、RSA
-        public static string sign_type = "RSA";
-        //public static string sign_type = "RSA";
-        //版本号，无需修改
-        public static string version = "1.0";
+        /// <summary>
+        /// 手续费
+        /// </summary>
+        public decimal AdditionalFee { get; set; }
     }
 }

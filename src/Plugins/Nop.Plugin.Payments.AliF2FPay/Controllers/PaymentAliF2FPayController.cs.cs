@@ -88,5 +88,28 @@ namespace Nop.Plugin.Payments.AliF2FPay.Controllers
         {
             return View("~/Plugins/Payments.AliF2FPay/Views/PaymentInfo.cshtml");
         }
+
+        [HttpPost]
+        [AdminAuthorize]
+        [ChildActionOnly]
+        public ActionResult Configure(ConfigurationModel model)
+        {
+            if (!ModelState.IsValid)
+                return Configure();
+
+            //save settings
+            this._aliF2FPayPaymentSettings.AdditionalFee = model.AdditionalFee;
+            this._aliF2FPayPaymentSettings.Alipay_public_key = model.Alipay_public_key;
+            this._aliF2FPayPaymentSettings.AppId = model.AppId;
+            this._aliF2FPayPaymentSettings.Merchant_private_key = model.Merchant_private_key;
+            this._aliF2FPayPaymentSettings.Merchant_public_key = model.Merchant_public_key;
+            this._aliF2FPayPaymentSettings.Pid = model.Pid;
+            
+            _settingService.SaveSetting(this._aliF2FPayPaymentSettings);
+
+            SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+
+            return Configure();
+        }
     }
 }

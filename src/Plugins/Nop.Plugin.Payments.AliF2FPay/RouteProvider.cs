@@ -11,11 +11,11 @@ namespace Nop.Plugin.Payments.AliF2FPay
         public void RegisterRoutes(RouteCollection routes)
         {
             //Notify
-            routes.MapRoute("Plugin.Payments.AliPay.Notify",
-                 "Plugins/PaymentAliPay/Notify",
-                 new { controller = "PaymentAliPay", action = "Notify" },
-                 new[] { "Nop.Plugin.Payments.AliPay.Controllers" }
-            );
+            //routes.MapRoute("Plugin.Payments.AliF2FPay.Notify",
+            //     "Plugins/PaymentAliPay/Notify",
+            //     new { controller = "PaymentAliPay", action = "Notify" },
+            //     new[] { "Nop.Plugin.Payments.AliF2FPay.Controllers" }
+            //);
 
             ////Notify
             //routes.MapRoute("Plugin.Payments.AliPay.Return",

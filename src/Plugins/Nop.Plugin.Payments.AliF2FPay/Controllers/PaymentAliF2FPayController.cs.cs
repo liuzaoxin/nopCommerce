@@ -82,5 +82,11 @@ namespace Nop.Plugin.Payments.AliF2FPay.Controllers
 
             return View("~/Plugins/Payments.AliF2FPay/Views/Configure.cshtml", model);
         }
+
+        [ChildActionOnly]
+        public ActionResult PaymentInfo()
+        {
+            return View("~/Plugins/Payments.AliF2FPay/Views/PaymentInfo.cshtml");
+        }
     }
 }

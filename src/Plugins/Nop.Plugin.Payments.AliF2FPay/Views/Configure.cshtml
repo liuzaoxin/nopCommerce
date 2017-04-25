@@ -2,7 +2,7 @@
     Layout = "";
 }
 @model ConfigurationModel
-@using Nop.Plugin.Payments.AliPay.Models;
+@using Nop.Plugin.Payments.AliF2FPay.Models;
 @using Nop.Web.Framework;
 @using (Html.BeginForm())
 {
@@ -12,29 +12,48 @@
             <div class="panel-body">
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.NopLabelFor(model => model.SellerEmail)
+                        @Html.NopLabelFor(model => model.Alipay_public_key)
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.SellerEmail)
-                        @Html.ValidationMessageFor(model => model.SellerEmail)
+                        @Html.NopEditorFor(model => model.Alipay_public_key)
+                        @Html.ValidationMessageFor(model => model.Alipay_public_key)
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.NopLabelFor(model => model.Key)
+                        @Html.NopLabelFor(model => model.Merchant_private_key)
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.Key)
-                        @Html.ValidationMessageFor(model => model.Key)
+                        @Html.NopEditorFor(model => model.Merchant_private_key)
+                        @Html.ValidationMessageFor(model => model.Merchant_private_key)
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.NopLabelFor(model => model.Partner)
+                        @Html.NopLabelFor(model => model.Merchant_public_key)
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.Partner)
-                        @Html.ValidationMessageFor(model => model.Partner)
+                        @Html.NopEditorFor(model => model.Merchant_public_key)
+                        @Html.ValidationMessageFor(model => model.Merchant_public_key)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AppId)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.AppId)
+                        @Html.ValidationMessageFor(model => model.AppId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.Pid)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.Pid)
+                        @Html.ValidationMessageFor(model => model.Pid)
                     </div>
                 </div>
                 <div class="form-group">

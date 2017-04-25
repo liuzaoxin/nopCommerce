@@ -17,12 +17,12 @@ namespace Nop.Plugin.Payments.AliF2FPay
                  new[] { "Nop.Plugin.Payments.AliPay.Controllers" }
             );
 
-            //Notify
-            routes.MapRoute("Plugin.Payments.AliPay.Return",
-                 "Plugins/PaymentAliPay/Return",
-                 new { controller = "PaymentAliPay", action = "Return" },
-                 new[] { "Nop.Plugin.Payments.AliPay.Controllers" }
-            );
+            ////Notify
+            //routes.MapRoute("Plugin.Payments.AliPay.Return",
+            //     "Plugins/PaymentAliPay/Return",
+            //     new { controller = "PaymentAliPay", action = "Return" },
+            //     new[] { "Nop.Plugin.Payments.AliPay.Controllers" }
+            //);
         }
 
         #endregion

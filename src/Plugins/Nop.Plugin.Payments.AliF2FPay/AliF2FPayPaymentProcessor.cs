@@ -6,6 +6,7 @@ using Nop.Core;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Payments;
 using Nop.Core.Plugins;
+using Nop.Plugin.Payments.AliF2FPay.Controllers;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Services.Payments;
@@ -22,7 +23,7 @@ namespace Nop.Plugin.Payments.AliF2FPay
     /// <summary>
     /// AliF2FPay payment processor
     /// </summary>
-    public class AliF2FPayPaymentProcessor
+    public class AliF2FPayPaymentProcessor : BasePlugin, IPaymentMethod
     {
         //private LogHelper log = new LogHelper(AppDomain.CurrentDomain.BaseDirectory + "/log/log.txt");
 
@@ -76,13 +77,20 @@ namespace Nop.Plugin.Payments.AliF2FPay
 
         #region methods
 
+        public ProcessPaymentResult ProcessPayment(ProcessPaymentRequest processPaymentRequest)
+        {
+            var result = new ProcessPaymentResult { NewPaymentStatus = PaymentStatus.Pending };
+
+            return result;
+        }
+
         /// <summary>
         /// Post process payment (used by payment gateways that require redirecting to a third-party URL)
         /// </summary>
         /// <param name="postProcessPaymentRequest">Payment info required for an order processing</param>
         public void PostProcessPayment(PostProcessPaymentRequest postProcessPaymentRequest)
         {
-
+            Alipay_RSA_Submit(postProcessPaymentRequest.Order);
         }
 
         /// <summary>
@@ -212,6 +220,24 @@ namespace Nop.Plugin.Payments.AliF2FPay
             routeValues = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Payments.AliF2FPay.Controllers" }, { "area", null } };
         }
 
+        /// <summary>
+        /// Gets a route for payment info
+        /// </summary>
+        /// <param name="actionName">Action name</param>
+        /// <param name="controllerName">Controller name</param>
+        /// <param name="routeValues">Route values</param>
+        public void GetPaymentInfoRoute(out string actionName, out string controllerName, out RouteValueDictionary routeValues)
+        {
+            actionName = "PaymentInfo";
+            controllerName = "PaymentF2FAliPay";
+            routeValues = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Payments.AliF2FPay.Controllers" }, { "area", null } };
+        }
+
+        public Type GetControllerType()
+        {
+            return typeof(PaymentAliF2FPayController);
+        }
+
         protected void Alipay_RSA_Submit(Order order)
         {
 
@@ -338,6 +364,162 @@ namespace Nop.Plugin.Payments.AliF2FPay
             //object o = precreateResult.response.OutTradeNo;
             //myThread.Start(o);
 
+        }
+
+        public override void Install()
+        {
+            //settings
+            var settings = new AliF2FPayPaymentSettings
+            {
+                AdditionalFee = 0,
+                Alipay_public_key = @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB",
+                AppId = "2017042406941306",
+                Merchant_private_key = @"MIICXQIBAAKBgQDB4GRcG4clcfX/X8et1gR0uNzkSMuD7aj++PbbstMNs97C0LEu
+O7US+/rdGHDPJJiiEf3mlbpRDF6jBu7aNJf7DOyWZg6OYLBaccopZ0rYfCkwoLAh
+WU7coLbclToAhlHniq1ytqfkwpJl7r3Jz8SNMhf9U9c+tylONbIFHF3NOQIDAQAB
+AoGADf7f39JQ6EAYzQ2iAYeQnMh3kbc7kdOHPpjEYUnAeJ3Cd/fOwpKm2K7+BhXs
+lteCeTipRosKfy1Qa55lgbUIP4PkZ+BeiOXUnqVsITtvwr1zfB7sWIjoX9nDLrPd
+o1kvunyDz05yj064E5B/y9Vx4+48ztr/BunY0uN3BRuRK00CQQD6wAmC7P50BGAD
+oFoXJKWkzUoB39F6ieleZYzyY2qmPwZyqQ2lePaVE0YpdV8ZPw4pa9DAa3pL/OdU
+Xy9R3GaDAkEAxe+Gg6gfTKMUBcuDQZf8H5XSr3RoC07I1BdjDzRZOeTnCGrIZr2G
+z2454AxjuDa+f9bqu6+gqHEHd27Vb0JQkwJAexLc2EVIk1s+YSlIbsmO//e/FnJr
+2BBu2eVQK/x98UFIAelWCFz58qu2KU0xsyuO4OfJW1ilezyTsobRrAVYzwJBAKrP
+pZmAQGJ2aRUHJ2I3so/fT02yewcnGhBNjmLUnhtj+iw9WmuvKuNfD/rVNkkGlSbl
+ZPRK/63cvMDImM/GvpkCQQD3hnZdXA9sz0yOEjCLzB/d9aPvwkDTfb2KGSGqTFS0
+MW219UMXNPhz+MF1WEOb6UJVRwxcpfLeGjeDzKg2whby",
+                Merchant_public_key = @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDB4GRcG4clcfX/X8et1gR0uNzk
+SMuD7aj++PbbstMNs97C0LEuO7US+/rdGHDPJJiiEf3mlbpRDF6jBu7aNJf7DOyW
+Zg6OYLBaccopZ0rYfCkwoLAhWU7coLbclToAhlHniq1ytqfkwpJl7r3Jz8SNMhf9
+U9c+tylONbIFHF3NOQIDAQAB",
+                Pid = "2088502894092597"
+            };
+
+            _settingService.SaveSetting(settings);
+
+            //locales
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.RedirectionTip", "You will be redirected to AliF2FPay site to complete the order.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.Alipay_public_key", "Alipay_public_key");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.Alipay_public_key.Hint", "Enter Alipay_public_key.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.AppId", "AppId");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.AppId.Hint", "Enter AppId.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.Merchant_public_key", "Merchant_public_key");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.Merchant_public_key.Hint", "Enter Merchant_public_key");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.Merchant_private_key", "Merchant_private_key");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.Merchant_private_key.Hint", "Enter Merchant_private_key.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.Pid", "Pid");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.Pid.Hint", "Enter partner.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.AdditionalFee", "Additional fee");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.AdditionalFee.Hint", "Enter additional fee to charge your customers.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.AliF2FPay.PaymentMethodDescription", "You will be redirected to AliF2FPay site to complete the order.");
+
+            base.Install();
+        }
+
+        public override void Uninstall()
+        {
+            //locales
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.SellerEmail.RedirectionTip");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.Alipay_public_key");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.Alipay_public_key.Hint");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.AppId");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.AppId.Hint");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.Merchant_public_key");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.Merchant_public_key.Hint");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.Merchant_private_key");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.Merchant_private_key.Hint");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.Pid");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.Pid.Hint");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.AdditionalFee");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.AdditionalFee.Hint");
+            this.DeletePluginLocaleResource("Plugins.Payments.AliF2FPay.PaymentMethodDescription");
+
+            base.Uninstall();
+        }
+
+        #endregion
+
+        #region Properies
+
+        /// <summary>
+        /// Gets a value indicating whether capture is supported
+        /// </summary>
+        public bool SupportCapture
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether partial refund is supported
+        /// </summary>
+        public bool SupportPartiallyRefund
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether refund is supported
+        /// </summary>
+        public bool SupportRefund
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether void is supported
+        /// </summary>
+        public bool SupportVoid
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a recurring payment type of payment method
+        /// </summary>
+        public RecurringPaymentType RecurringPaymentType
+        {
+            get
+            {
+                return RecurringPaymentType.NotSupported;
+            }
+        }
+
+        /// <summary>
+        /// Gets a payment method type
+        /// </summary>
+        public PaymentMethodType PaymentMethodType
+        {
+            get
+            {
+                return PaymentMethodType.Redirection;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether we should display a payment information page for this plugin
+        /// </summary>
+        public bool SkipPaymentInfo
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Gets a payment method description that will be displayed on checkout pages in the public store
+        /// </summary>
+        public string PaymentMethodDescription
+        {
+            get { return _localizationService.GetResource("Plugins.Payments.AliPay.PaymentMethodDescription"); }
         }
 
         #endregion

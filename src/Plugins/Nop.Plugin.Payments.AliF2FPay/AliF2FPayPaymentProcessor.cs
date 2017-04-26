@@ -12,11 +12,13 @@ using Nop.Services.Localization;
 using Nop.Services.Payments;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Routing;
 using ThoughtWorks.QRCode.Codec;
+using System.Web.UI;
 
 namespace Nop.Plugin.Payments.AliF2FPay
 {
@@ -292,7 +294,7 @@ namespace Nop.Plugin.Payments.AliF2FPay
             }
             else
             {
-                out_trade_no = pid.Trim();
+                out_trade_no = orderid.Trim();
             }
 
             AlipayTradePrecreateContentBuilder builder = new AlipayTradePrecreateContentBuilder();
@@ -301,7 +303,7 @@ namespace Nop.Plugin.Payments.AliF2FPay
             //订单编号
             builder.out_trade_no = out_trade_no;
             //订单总金额
-            builder.total_amount = totalfee.ToString().Trim();
+            builder.total_amount = Math.Round(totalfee, 2).ToString().Trim();
             //参与优惠计算的金额
             //builder.discountable_amount = "";
             //不参与优惠计算的金额
@@ -343,18 +345,17 @@ namespace Nop.Plugin.Payments.AliF2FPay
         private void DoWaitProcess(AlipayF2FPrecreateResult precreateResult)
         {
             //打印出 preResponse.QrCode 对应的条码
-            //Bitmap bt;
-            //string enCodeString = precreateResult.response.QrCode;
-            //QRCodeEncoder qrCodeEncoder = new QRCodeEncoder();
-            //qrCodeEncoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
-            //qrCodeEncoder.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.H;
-            //qrCodeEncoder.QRCodeScale = 3;
-            //qrCodeEncoder.QRCodeVersion = 8;
-            //bt = qrCodeEncoder.Encode(enCodeString, Encoding.UTF8);
-            //string filename = System.DateTime.Now.ToString("yyyyMMddHHmmss") + "0000" + (new Random()).Next(1, 10000).ToString()
-            // + ".jpg";
+            Bitmap bt;
+            string enCodeString = precreateResult.response.QrCode;
+            QRCodeEncoder qrCodeEncoder = new QRCodeEncoder();
+            qrCodeEncoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
+            qrCodeEncoder.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.H;
+            qrCodeEncoder.QRCodeScale = 3;
+            qrCodeEncoder.QRCodeVersion = 8;
+            bt = qrCodeEncoder.Encode(enCodeString, Encoding.UTF8);
+            string filename = System.DateTime.Now.ToString("yyyyMMddHHmmss") + "0000" + (new Random()).Next(1, 10000).ToString()
+             + ".jpg";
             //bt.Save(Server.MapPath("~/images/") + filename);
-            //this.Image1.ImageUrl = "~/images/" + filename;
 
             //轮询订单结果
             //根据业务需要，选择是否新起线程进行轮询
@@ -373,8 +374,23 @@ namespace Nop.Plugin.Payments.AliF2FPay
                 AdditionalFee = 0,
                 Alipay_public_key = @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB",
                 AppId = "2017042406941306",
-                Merchant_private_key = @"MIICXQIBAAKBgQDB4GRcG4clcfX/X8et1gR0uNzkSMuD7aj++PbbstMNs97C0LEuO7US+/rdGHDPJJiiEf3mlbpRDF6jBu7aNJf7DOyWZg6OYLBaccopZ0rYfCkwoLAhWU7coLbclToAhlHniq1ytqfkwpJl7r3Jz8SNMhf9U9c+tylONbIFHF3NOQIDAQABAoGADf7f39JQ6EAYzQ2iAYeQnMh3kbc7kdOHPpjEYUnAeJ3Cd/fOwpKm2K7+BhXslteCeTipRosKfy1Qa55lgbUIP4PkZ+BeiOXUnqVsITtvwr1zfB7sWIjoX9nDLrPdo1kvunyDz05yj064E5B/y9Vx4+48ztr/BunY0uN3BRuRK00CQQD6wAmC7P50BGADoFoXJKWkzUoB39F6ieleZYzyY2qmPwZyqQ2lePaVE0YpdV8ZPw4pa9DAa3pL/OdUXy9R3GaDAkEAxe+Gg6gfTKMUBcuDQZf8H5XSr3RoC07I1BdjDzRZOeTnCGrIZr2Gz2454AxjuDa+f9bqu6+gqHEHd27Vb0JQkwJAexLc2EVIk1s+YSlIbsmO//e/FnJr2BBu2eVQK/x98UFIAelWCFz58qu2KU0xsyuO4OfJW1ilezyTsobRrAVYzwJBAKrPpZmAQGJ2aRUHJ2I3so/fT02yewcnGhBNjmLUnhtj+iw9WmuvKuNfD/rVNkkGlSblZPRK/63cvMDImM/GvpkCQQD3hnZdXA9sz0yOEjCLzB/d9aPvwkDTfb2KGSGqTFS0MW219UMXNPhz+MF1WEOb6UJVRwxcpfLeGjeDzKg2whby",
-                Merchant_public_key = @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDB4GRcG4clcfX/X8et1gR0uNzkSMuD7aj++PbbstMNs97C0LEuO7US+/rdGHDPJJiiEf3mlbpRDF6jBu7aNJf7DOyWZg6OYLBaccopZ0rYfCkwoLAhWU7coLbclToAhlHniq1ytqfkwpJl7r3Jz8SNMhf9U9c+tylONbIFHF3NOQIDAQAB",
+                Merchant_private_key = @"MIICXQIBAAKBgQDB4GRcG4clcfX/X8et1gR0uNzkSMuD7aj++PbbstMNs97C0LEu
+O7US+/rdGHDPJJiiEf3mlbpRDF6jBu7aNJf7DOyWZg6OYLBaccopZ0rYfCkwoLAh
+WU7coLbclToAhlHniq1ytqfkwpJl7r3Jz8SNMhf9U9c+tylONbIFHF3NOQIDAQAB
+AoGADf7f39JQ6EAYzQ2iAYeQnMh3kbc7kdOHPpjEYUnAeJ3Cd/fOwpKm2K7+BhXs
+lteCeTipRosKfy1Qa55lgbUIP4PkZ+BeiOXUnqVsITtvwr1zfB7sWIjoX9nDLrPd
+o1kvunyDz05yj064E5B/y9Vx4+48ztr/BunY0uN3BRuRK00CQQD6wAmC7P50BGAD
+oFoXJKWkzUoB39F6ieleZYzyY2qmPwZyqQ2lePaVE0YpdV8ZPw4pa9DAa3pL/OdU
+Xy9R3GaDAkEAxe+Gg6gfTKMUBcuDQZf8H5XSr3RoC07I1BdjDzRZOeTnCGrIZr2G
+z2454AxjuDa+f9bqu6+gqHEHd27Vb0JQkwJAexLc2EVIk1s+YSlIbsmO//e/FnJr
+2BBu2eVQK/x98UFIAelWCFz58qu2KU0xsyuO4OfJW1ilezyTsobRrAVYzwJBAKrP
+pZmAQGJ2aRUHJ2I3so/fT02yewcnGhBNjmLUnhtj+iw9WmuvKuNfD/rVNkkGlSbl
+ZPRK/63cvMDImM/GvpkCQQD3hnZdXA9sz0yOEjCLzB/d9aPvwkDTfb2KGSGqTFS0
+MW219UMXNPhz+MF1WEOb6UJVRwxcpfLeGjeDzKg2whby",
+                Merchant_public_key = @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDB4GRcG4clcfX/X8et1gR0uNzk
+SMuD7aj++PbbstMNs97C0LEuO7US+/rdGHDPJJiiEf3mlbpRDF6jBu7aNJf7DOyW
+Zg6OYLBaccopZ0rYfCkwoLAhWU7coLbclToAhlHniq1ytqfkwpJl7r3Jz8SNMhf9
+U9c+tylONbIFHF3NOQIDAQAB",
                 Pid = "2088502894092597"
             };
 

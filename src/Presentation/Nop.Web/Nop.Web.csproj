@@ -655,6 +655,7 @@
     <Content Include="Scripts\jquery.magnific-popup.js" />
     <Content Include="Scripts\jquery.magnific-popup.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.qrcode.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\selectivizr.min.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />

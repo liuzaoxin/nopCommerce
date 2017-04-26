@@ -1,6 +1,247 @@
 ﻿@{
     Layout = "";
 }
+<div class="cashier-center-view view-qrcode fn-left" id="J_view_qr">
+    <!-- 指引区域 -->
+
+
+    <style type="text/css">
+        .qrcode-area {
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* 扫码头部信息 */
+        .qrcode-integration .qrcode-header {
+            display: block;
+            width: auto;
+            margin: 0;
+            padding: 0;
+            margin-top: 75px;
+            margin-bottom: 16px;
+        }
+
+        .qrcode-header-money {
+            font-size: 26px;
+            font-weight: 700;
+            color: #f60;
+        }
+
+        .qrcode-integration .qrcode-img-area {
+            width: 168px;
+            height: 168px;
+            text-align: center;
+        }
+
+        .qrcode-img-area.qrcode-img-crash {
+            height: 220px;
+        }
+
+        .qrcode-reward-wrapper {
+            text-align: center;
+        }
+
+        .qrcode-reward {
+            display: inline-block;
+            margin: 0;
+            padding: 2px 5px;
+            background-color: #0188cd;
+            border-radius: 0;
+            font-size: 12px;
+            line-height: 16px;
+            color: #fff;
+        }
+
+        .qrcode-reward-question {
+            font-size: 12px;
+            margin-left: 5px;
+            margin-right: 0;
+        }
+
+        .qrcode-integration .qrcode-loading {
+            top: 70px;
+            left: 60px;
+        }
+
+        .qrcode-integration .qrcode-img {
+            top: 70px;
+            left: 70px;
+        }
+
+        .qrcode-integration .qrcode-img-wrapper {
+            position: relative;
+            width: 168px;
+            height: auto;
+            min-height: 168px;
+            margin: 0 auto;
+            padding: 6px;
+            border: 1px solid #d3d3d3;
+            -webkit-box-shadow: 1px 1px 1px #ccc;
+            box-shadow: 1px 1px 1px #ccc;
+        }
+
+        .qrcode-img-area .qrcode-busy-icon {
+            padding-top: 15px;
+        }
+
+        .qrcode-img-area .qrcode-busy-text {
+            margin-top: 20px;
+        }
+
+        a.mi-button-lwhite .mi-button-text {
+            padding: 8px 39px 4px 36px;
+        }
+
+        .qrcode-img-area .mi-button {
+            margin-top: 40px;
+        }
+
+        /* 扫码图片下方提示 */
+        .qrcode-img-explain {
+            padding: 10px 0 6px;
+        }
+
+            .qrcode-img-explain img {
+                margin-left: 20px;
+                margin-top: 5px;
+            }
+
+            .qrcode-img-explain div {
+                margin-left: 10px;
+            }
+
+
+
+
+        .qrcode-foot {
+            text-align: center;
+        }
+
+        .qrcode-downloadApp,
+        .qrcode-downloadApp:hover,
+        .qrcode-downloadApp:active,
+        .qrcode-explain a.qrcode-downloadApp:hover {
+            font-size: 12px;
+            color: #a6a6a6;
+            text-decoration: underline;
+        }
+
+        .area-split {
+            margin-top: 156px;
+            width: 10px;
+            height: 300px;
+            background-image: url(https://t.alipayobjects.com/images/T1PspfXixsXXXXXXXX.png);
+            background-repeat: no-repeat;
+        }
+
+        .qrguide-area {
+            position: absolute;
+            top: 62px;
+            left: 505px;
+            width: 204px;
+            height: 183px;
+            cursor: pointer;
+        }
+
+            .qrguide-area .qrguide-area-img {
+                display: block;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                z-index: -1;
+            }
+
+                .qrguide-area .qrguide-area-img.active {
+                    z-index: 10;
+                }
+
+                .qrguide-area .qrguide-area-img.background {
+                    z-index: 9;
+                }
+
+        .qrcode-notice .qrcode-notice-title {
+            padding: 10px 10px 11px 63px;
+        }
+    </style>
+    <!-- 扫码区域 -->
+
+
+    <div data-role="qrPayArea" style="position: relative; width: 803px; display: inline;" class="qrcode-integration qrcode-area" id="J_qrPayArea">
+        <div class="qrcode-header">
+            <div class="ft-center" style="text-align: center">扫一扫付款（元）</div>
+            <div class="ft-center qrcode-header-money" style="text-align: center">12.00</div>
+        </div>
+
+        <div class="qrcode-img-wrapper" data-role="qrPayImgWrapper">
+            <div data-role="qrPayImg" class="qrcode-img-area">
+
+                <div style="position: relative; display: inline-block;" id="cav_div">
+                    <img src="https://t.alipayobjects.com/tfscom/T1Z5XfXdxmXXXXXXXX.png" style="position: absolute; top: 50%; left: 50%; width: 42px; height: 42px; margin-left: -21px; margin-top: -21px">
+                </div>
+            </div>
+
+            <div class="qrcode-img-explain fn-clear">
+                <img class="fn-left" style="float: left" src="https://t.alipayobjects.com/images/T1bdtfXfdiXXXXXXXX.png" alt="扫一扫标识" seed="qrcodeImgExplain-tImagesT1bdtfXfdiXXXXXXXX" smartracker="on">
+                <div class="fn-left">
+                    打开手机支付宝<br>
+                    扫一扫继续付款
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <style>
+        .ad-wrap {
+            width: 260px;
+        }
+
+        .ad-title {
+            background-color: #f5f5f5;
+            padding: 10px;
+            line-height: 12px;
+            font-size: 12px;
+            color: #1a1a1a;
+            font-family: Heiti SC;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .ad-cnt {
+            padding: 10px;
+            font-size: 12px;
+            color: #1a1a1a;
+            font-family: Heiti SC;
+        }
+
+        .arale-tip-1_2_2 .ui-poptip-white .ui-poptip-container {
+            padding: 0;
+        }
+
+        .arale-tip-1_2_2 .ui-poptip-white .ui-poptip-arrow-2 span,
+        .arale-tip-1_2_2 .ui-poptip-white .ui-poptip-arrow-3 span {
+            border-left-color: #f5f5f5;
+        }
+    </style>
+
+    <script type="text/javascript">
+                $("#cav_div").qrcode({
+                    render: "table", //table方式
+                    width: 168, //宽度
+                    height: 168, //高度
+                    text: "www.helloweba.com" //任意内容
+                });
+                seajs.use(['$', 'arale/tip/1.2.2/tip'], function ($, Tip) {
+                    $('#J_adShowTrigger').length && new Tip({
+                        trigger: '#J_adShowTrigger',
+                        content: '<div class="ad-wrap"><div class="ad-title">' + $('#J_adName').val() + '</div><div class="ad-cnt">' + $('#J_adInfo').val() + '</div></div>',    // 提示框显示的内容
+                        theme: 'white',
+                        inViewport: true,
+                        arrowPosition: 2
+                    });
+                });
+    </script>
+</div>
 
 <table width="100%" cellpadding="0" cellspacing="0">
     <tr>

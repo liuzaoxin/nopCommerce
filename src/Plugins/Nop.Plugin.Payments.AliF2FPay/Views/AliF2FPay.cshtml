@@ -1,0 +1,259 @@
+﻿@{
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+}
+@using Nop.Web.Framework
+@using Nop.Web.Framework.UI
+<html>
+<head>
+    
+    <script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
+	<link href="~/Content/jquery-ui-themes/smoothness/jquery-ui-1.10.3.custom.css" rel="Stylesheet"></link>
+    <script type="text/javascript" src="~/Scripts/jquery-ui-1.10.3.custom.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.qrcode.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/json2.js"></script>
+    <script type="text/javascript">
+        var int;
+        function orderStatus() {
+            $.ajax({
+                type: "Post",
+                url: "/PaymentAliF2FPay/QueryPaystatus",
+                data: {"orderId":"@ViewData["orderid"]"},
+                success: function (data) {
+                    var obj = JSON.parse(data);
+                    if (obj.Reust == "SUCCESS") {
+                        alert("success");
+                        window.clearInterval(int)
+                        $("#J_qrPayArea").hide();
+                        $("#paysuccess").show();
+                    }
+
+                },
+                error: function (msg) {
+                    alert(msg);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            int = self.setInterval("orderStatus()", 5000);
+        });
+
+    </script>
+    <style type="text/css">
+        .qrcode-area {
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* 扫码头部信息 */
+        .qrcode-integration .qrcode-header {
+            display: block;
+            width: auto;
+            margin: 0;
+            padding: 0;
+            margin-top: 0px;
+            margin-bottom: 5px;
+        }
+
+        .qrcode-header-money {
+            font-size: 26px;
+            font-weight: 700;
+            color: #f60;
+        }
+
+        .qrcode-integration .qrcode-img-area {
+            width: 168px;
+            height: 168px;
+            text-align: center;
+        }
+
+        .qrcode-img-area.qrcode-img-crash {
+            height: 220px;
+        }
+
+        .qrcode-reward-wrapper {
+            text-align: center;
+        }
+
+        .qrcode-reward {
+            display: inline-block;
+            margin: 0;
+            padding: 2px 5px;
+            background-color: #0188cd;
+            border-radius: 0;
+            font-size: 12px;
+            line-height: 16px;
+            color: #fff;
+        }
+
+        .qrcode-reward-question {
+            font-size: 12px;
+            margin-left: 5px;
+            margin-right: 0;
+        }
+
+        .qrcode-integration .qrcode-loading {
+            top: 70px;
+            left: 60px;
+        }
+
+        .qrcode-integration .qrcode-img {
+            top: 70px;
+            left: 70px;
+        }
+
+        .qrcode-integration .qrcode-img-wrapper {
+            position: relative;
+            width: 181px;
+            height: auto;
+            min-height: 168px;
+            margin: 0 auto;
+            padding: 6px;
+            border: 1px solid #d3d3d3;
+            -webkit-box-shadow: 1px 1px 1px #ccc;
+            box-shadow: 1px 1px 1px #ccc;
+        }
+
+        .qrcode-img-area .qrcode-busy-icon {
+            padding-top: 15px;
+        }
+
+        .qrcode-img-area .qrcode-busy-text {
+            margin-top: 20px;
+        }
+
+        a.mi-button-lwhite .mi-button-text {
+            padding: 8px 39px 4px 36px;
+        }
+
+        .qrcode-img-area .mi-button {
+            margin-top: 40px;
+        }
+
+        /* 扫码图片下方提示 */
+        .qrcode-img-explain {
+            padding: 10px 0 6px;
+        }
+
+            .qrcode-img-explain img {
+                margin-left: 20px;
+                margin-top: 5px;
+            }
+
+            .qrcode-img-explain div {
+                margin-left: 10px;
+            }
+
+
+
+
+        .qrcode-foot {
+            text-align: center;
+        }
+
+        .qrcode-downloadApp,
+        .qrcode-downloadApp:hover,
+        .qrcode-downloadApp:active,
+        .qrcode-explain a.qrcode-downloadApp:hover {
+            font-size: 12px;
+            color: #a6a6a6;
+            text-decoration: underline;
+        }
+
+        .area-split {
+            margin-top: 156px;
+            width: 10px;
+            height: 300px;
+            background-image: url(https://t.alipayobjects.com/images/T1PspfXixsXXXXXXXX.png);
+            background-repeat: no-repeat;
+        }
+
+        .qrguide-area {
+            position: absolute;
+            top: 62px;
+            left: 505px;
+            width: 204px;
+            height: 183px;
+            cursor: pointer;
+        }
+
+            .qrguide-area .qrguide-area-img {
+                display: block;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                z-index: -1;
+            }
+
+                .qrguide-area .qrguide-area-img.active {
+                    z-index: 10;
+                }
+
+                .qrguide-area .qrguide-area-img.background {
+                    z-index: 9;
+                }
+
+        .qrcode-notice .qrcode-notice-title {
+            padding: 10px 10px 11px 63px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page home-page">
+        <div class="page-body">
+            @Html.Widget("home_page_top")
+            @Html.Widget("home_page_before_categories")
+            <div class="cashier-center-view view-qrcode fn-left" id="J_view_qr">
+
+                <!-- 扫码区域 -->
+                <div data-role="qrPayArea" style="position: relative; width: 803px;" hidden="hidden" class="ft-center" id="paysuccess">
+				<div style="background-image: url(../Payments.AliF2FPay/img/right.jpg);background-repeat: no-repeat;font-family: '微软雅黑' , yahei;font-size: 24px;font-weight: normal;color: #7AC611;padding-left: 40px;background-color: #FFF;display: block;"><span style="font-family: '微软雅黑' , yahei;font-size: 24px;font-weight: normal;color: #7AC611;">您已支付成功，平台将尽快处理！</span></div>
+				<p style="font-size: 14px;color: #666;line-height: 22px;margin-top: 10px;display: block;-webkit-margin-before: 1em;-webkit-margin-after: 1em;-webkit-margin-start: 0px;-webkit-margin-end: 0px;">
+            您的订单编号为：<b style="color: #F60;font-weight: bold;">@ViewData["orderid"]</b><label>，支付金额为：<b style="color: #F60;font-weight: bold;">@ViewData["AliF2FpayMoney"]</b> 元。<br>
+            请到"我的帐户 - 我的订单"页面随时关注订单的状态变化。</label></p>
+				</div>
+				<div data-role="qrPayArea" style="position: relative; width: 803px; display: inline;" class="qrcode-integration qrcode-area" id="J_qrPayArea">
+                    <div class="qrcode-header">
+                        <div class="ft-center" style="text-align: center">扫一扫付款（元）</div>
+                        <div class="ft-center qrcode-header-money" style="text-align: center">
+                            @ViewData["AliF2FpayMoney"]</ div >
+                        </div>
+
+                        <div class="qrcode-img-wrapper" data-role="qrPayImgWrapper">
+                            <div data-role="qrPayImg" class="qrcode-img-area">
+
+                                <div style="position: relative; display: inline-block;" id="cav_div">
+                                    <img src="https://t.alipayobjects.com/tfscom/T1Z5XfXdxmXXXXXXXX.png" style="position: absolute; top: 50%; left: 50%; width: 42px; height: 42px; margin-left: -21px; margin-top: -21px">
+                                </div>
+                            </div>
+
+                            <div class="qrcode-img-explain fn-clear">
+                                <img class="fn-left" style="float: left" src="https://t.alipayobjects.com/images/T1bdtfXfdiXXXXXXXX.png" alt="扫一扫标识" seed="qrcodeImgExplain-tImagesT1bdtfXfdiXXXXXXXX" smartracker="on">
+                                <div class="fn-left">
+                                    打开手机支付宝<br>
+                                    扫一扫继续付款
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <script type="text/javascript">
+                $("#cav_div").qrcode({
+                    render: "canvas", //table方式
+                    width: 168, //宽度
+                    height: 168, //高度
+                    text: "@ViewData["AliF2FpayPayurl"]" //任意内容
+                });
+                    </script>
+                </div>
+
+                @Html.Widget("home_page_before_poll")
+                @Html.Action("HomePagePolls", "Poll")
+                @Html.Widget("home_page_bottom")
+            </div>
+        </div>
+</body>
+</html>
+

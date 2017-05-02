@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Threading;
 using Nop.Services.Payments;
 using Nop.Web.Framework.Controllers;
 using Nop.Plugin.Payments.AliF2FPay.Models;
@@ -9,13 +10,35 @@ using Nop.Services.Orders;
 using Nop.Services.Logging;
 using Nop.Services.Localization;
 using Nop.Core.Domain.Payments;
+using Com.Alipay.Business;
+using Com.Alipay;
+using Com.Alipay.Model;
+using System.Net.Json;
 
 namespace Nop.Plugin.Payments.AliF2FPay.Controllers
 {
     public class PaymentAliF2FPayController : BasePaymentController
     {
+        #region Constants
+
+        //支付宝网关
+        private const string ServerUrl = "https://openapi.alipay.com/gateway.do";
+        private const string MapiUrl = "https://mapi.alipay.com/gateway.do";
+        private const string MonitorUrl = "http://mcloudmonitor.com/gateway.do";
+
+        //编码，无需修改
+        private const string Charset = "utf-8";
+        //签名类型，支持RSA2
+        private const string Sign_type = "RSA";
+
+        //版本号，无需修改
+        private const string Version = "1.0";
+
+        #endregion
+
         #region Fields
 
+        private IAlipayTradeService serviceClient;
         private readonly ISettingService _settingService;
         private readonly IPaymentService _paymentService;
         private readonly IOrderService _orderService;
@@ -46,6 +69,8 @@ namespace Nop.Plugin.Payments.AliF2FPay.Controllers
             this._localizationService = localizationService;
             this._aliF2FPayPaymentSettings = aliF2FPayPaymentSettings;
             this._paymentSettings = paymentSettings;
+            this.serviceClient = F2FBiz.CreateClientInstance(ServerUrl, _aliF2FPayPaymentSettings.AppId, _aliF2FPayPaymentSettings.Merchant_private_key, Version,
+                             Sign_type, _aliF2FPayPaymentSettings.Alipay_public_key, Charset);
         }
 
         #endregion
@@ -87,6 +112,95 @@ namespace Nop.Plugin.Payments.AliF2FPay.Controllers
         public ActionResult PaymentInfo()
         {
             return View("~/Plugins/Payments.AliF2FPay/Views/PaymentInfo.cshtml");
+        }
+
+        [ValidateInput(false)]
+        public ActionResult AliF2FPay(string  paymoney, string payurl, string orderid)
+        {
+            ViewData["orderid"] = orderid;
+            ViewData["AliF2FpayMoney"] = paymoney.TrimEnd('0');
+            ViewData["AliF2FpayPayurl"] = payurl;
+            
+            return View("~/Plugins/Payments.AliF2FPay/Views/AliF2FPay.cshtml");
+        }
+
+        [ValidateInput(false)]
+        public ActionResult QueryPaystatus(string orderId)
+        {
+            Thread.Sleep(2000);
+
+            AlipayF2FQueryResult queryResult = new AlipayF2FQueryResult();
+            JsonObjectCollection collection = null;
+            collection = new JsonObjectCollection();
+            collection.Add(new JsonStringValue("Reust", "FAILED"));
+            queryResult = serviceClient.tradeQuery(orderId);
+            int id;
+            if (queryResult != null)
+            {
+                if (queryResult.Status == ResultEnum.SUCCESS)
+                {
+                    collection = new JsonObjectCollection();
+                    collection.Add(new JsonStringValue("Reust", "SUCCESS"));
+                    collection.Add(new JsonStringValue("OrderId", orderId));
+                    if (int.TryParse(orderId, out id))
+                    {
+                        var order = _orderService.GetOrderById(id);
+
+                        if (order != null && _orderProcessingService.CanMarkOrderAsPaid(order))
+                        {
+                            _orderProcessingService.MarkOrderAsPaid(order);
+                        }
+                    }
+                }
+            }
+            
+            return Json(collection.ToString());
+        }
+
+        /// <summary>
+        /// 轮询
+        /// </summary>
+        /// <param name="o">订单号</param>
+        public void LoopQuery(object o)
+        {
+            
+            AlipayF2FQueryResult queryResult = new AlipayF2FQueryResult();
+            int count = 100;
+            int interval = 10000;
+            string out_trade_no = o.ToString();
+
+            for (int i = 1; i <= count; i++)
+            {
+                Thread.Sleep(interval);
+                queryResult = serviceClient.tradeQuery(out_trade_no);
+                if (queryResult != null)
+                {
+                    if (queryResult.Status == ResultEnum.SUCCESS)
+                    {
+                        DoSuccessProcess(queryResult);
+                        return;
+                    }
+                }
+            }
+            DoFailedProcess(queryResult);
+        }
+
+        /// <summary>
+        /// 请添加支付成功后的处理
+        /// </summary>
+        private void DoSuccessProcess(AlipayF2FQueryResult queryResult)
+        {
+            //支付成功，请更新相应单据
+            //log.WriteLine("扫码支付成功：外部订单号" + queryResult.response.OutTradeNo);
+
+        }
+
+        /// <summary>
+        /// 请添加支付失败后的处理
+        /// </summary>
+        private void DoFailedProcess(AlipayF2FQueryResult queryResult)
+        {
+            //支付失败，请更新相应单据
         }
 
         [HttpPost]

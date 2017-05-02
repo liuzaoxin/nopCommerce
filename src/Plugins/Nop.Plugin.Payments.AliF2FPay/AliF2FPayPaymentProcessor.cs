@@ -19,6 +19,9 @@ using System.Threading.Tasks;
 using System.Web.Routing;
 using ThoughtWorks.QRCode.Codec;
 using System.Web.UI;
+using Nop.Web.Framework;
+using System.Web;
+using System.Threading;
 
 namespace Nop.Plugin.Payments.AliF2FPay
 {
@@ -54,6 +57,7 @@ namespace Nop.Plugin.Payments.AliF2FPay
         private readonly IStoreContext _storeContext;
         private readonly AliF2FPayPaymentSettings _aliF2FPayPaymentSettings;
         private readonly ILocalizationService _localizationService;
+        private string payurl;
 
         #endregion
 
@@ -232,7 +236,7 @@ namespace Nop.Plugin.Payments.AliF2FPay
         {
             actionName = "PaymentInfo";
             controllerName = "PaymentAliF2FPay";
-            routeValues = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Payments.AliF2FPay.Controllers" }, { "area", null } };
+            routeValues = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Payments.AliF2FPay.Controllers" }, { "area", null }, { "paymoney",11},{ "payurl", "www.baidu.com" } };
         }
 
         public Type GetControllerType()
@@ -259,7 +263,27 @@ namespace Nop.Plugin.Payments.AliF2FPay
             switch (precreateResult.Status)
             {
                 case ResultEnum.SUCCESS:
-                    DoWaitProcess(precreateResult);
+                    //DoWaitProcess(precreateResult);
+                    string domain = _webHelper.GetStoreLocation(false);
+                    var post = new RemotePost
+                    {
+                        FormName = "alipaysubmit",
+                        Url = domain + "Plugins/PaymentAliF2FPay/AliF2FPay",
+                        Method = "POST"
+                    };
+
+                    post.Add("payurl", precreateResult.response.QrCode); 
+                    post.Add("orderid", order.Id.ToString());
+                    post.Add("paymoney", order.OrderTotal.ToString());
+                    //post.Add("serverUrl", ServerUrl);
+                    //post.Add("appId", _aliF2FPayPaymentSettings.AppId);
+                    //post.Add("merchant_private_key", _aliF2FPayPaymentSettings.Merchant_private_key);
+                    //post.Add("version", Version);
+                    //post.Add("sign_type", Sign_type);
+                    //post.Add("alipay_public_key", _aliF2FPayPaymentSettings.Alipay_public_key);
+                    //post.Add("charset", Charset);
+
+                    post.Post();
                     break;
                 case ResultEnum.FAILED:
                     result = precreateResult.response.Body;
@@ -344,18 +368,7 @@ namespace Nop.Plugin.Payments.AliF2FPay
         /// <param name="precreateResult">二维码串</param>
         private void DoWaitProcess(AlipayF2FPrecreateResult precreateResult)
         {
-            //打印出 preResponse.QrCode 对应的条码
-            Bitmap bt;
-            string enCodeString = precreateResult.response.QrCode;
-            QRCodeEncoder qrCodeEncoder = new QRCodeEncoder();
-            qrCodeEncoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
-            qrCodeEncoder.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.H;
-            qrCodeEncoder.QRCodeScale = 3;
-            qrCodeEncoder.QRCodeVersion = 8;
-            bt = qrCodeEncoder.Encode(enCodeString, Encoding.UTF8);
-            string filename = System.DateTime.Now.ToString("yyyyMMddHHmmss") + "0000" + (new Random()).Next(1, 10000).ToString()
-             + ".jpg";
-            //bt.Save(Server.MapPath("~/images/") + filename);
+            this.payurl = precreateResult.response.QrCode;
 
             //轮询订单结果
             //根据业务需要，选择是否新起线程进行轮询
@@ -363,6 +376,8 @@ namespace Nop.Plugin.Payments.AliF2FPay
             //Thread myThread = new Thread(ParStart);
             //object o = precreateResult.response.OutTradeNo;
             //myThread.Start(o);
+
+            
 
         }
 
@@ -435,7 +450,6 @@ U9c+tylONbIFHF3NOQIDAQAB",
 
             base.Uninstall();
         }
-
         #endregion
 
         #region Properies

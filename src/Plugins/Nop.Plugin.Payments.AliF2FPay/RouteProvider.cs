@@ -10,19 +10,19 @@ namespace Nop.Plugin.Payments.AliF2FPay
 
         public void RegisterRoutes(RouteCollection routes)
         {
-            //Notify
-            //routes.MapRoute("Plugin.Payments.AliF2FPay.Notify",
-            //     "Plugins/PaymentAliPay/Notify",
-            //     new { controller = "PaymentAliPay", action = "Notify" },
-            //     new[] { "Nop.Plugin.Payments.AliF2FPay.Controllers" }
-            //);
+            //AliF2FPay
+            routes.MapRoute("Plugin.Payments.AliF2FPay.AliF2FPay",
+                 "Plugins/PaymentAliF2FPay/AliF2FPay",
+                 new { controller = "PaymentAliF2FPay", action = "AliF2FPay" },
+                 new[] { "Nop.Plugin.Payments.AliF2FPay.Controllers" }
+            );
 
-            ////Notify
-            //routes.MapRoute("Plugin.Payments.AliPay.Return",
-            //     "Plugins/PaymentAliPay/Return",
-            //     new { controller = "PaymentAliPay", action = "Return" },
-            //     new[] { "Nop.Plugin.Payments.AliPay.Controllers" }
-            //);
+            //Return
+            routes.MapRoute("Plugin.Payments.AliF2FPay.Return",
+                 "Plugins/PaymentAliF2FPay/Return",
+                 new { controller = "PaymentAliF2FPay", action = "Return" },
+                 new[] { "Nop.Plugin.Payments.AliF2FPay.Controllers" }
+            );
         }
 
         #endregion

@@ -1987,6 +1987,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="img\right.jpg" />
+    <Content Include="Scripts\jquery.qrcode.min.js" />
+    <Content Include="Scripts\json2.js" />
     <Content Include="Views\Configure.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

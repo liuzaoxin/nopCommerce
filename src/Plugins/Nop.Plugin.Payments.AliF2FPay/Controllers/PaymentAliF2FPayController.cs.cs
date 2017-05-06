@@ -118,7 +118,7 @@ namespace Nop.Plugin.Payments.AliF2FPay.Controllers
         public ActionResult AliF2FPay(string  paymoney, string payurl, string orderid)
         {
             ViewData["orderid"] = orderid;
-            ViewData["AliF2FpayMoney"] = paymoney.TrimEnd('0');
+            ViewData["AliF2FpayMoney"] = Math.Round(decimal.Parse(paymoney), 2).ToString();
             ViewData["AliF2FpayPayurl"] = payurl;
             
             return View("~/Plugins/Payments.AliF2FPay/Views/AliF2FPay.cshtml");

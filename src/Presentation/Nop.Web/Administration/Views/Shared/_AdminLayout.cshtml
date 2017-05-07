@@ -80,12 +80,20 @@
 <!DOCTYPE html>
 <html@(supportRtl ? Html.Raw(" dir=\"rtl\"") : null)>
     <head>
+        @{
+            var storeSettings = EngineContext.Current.Resolve<StoreInformationSettings>();
+            var displayMiniProfiler = storeSettings.DisplayMiniProfilerInPublicStore;
+        }
         <title>@adminPageTitle</title>
         <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         @Html.NopHeadCustom()
         @Html.NopCssFiles(this.Url, ResourceLocation.Head, false)
         @Html.NopScripts(this.Url, ResourceLocation.Head, false)
+        @if (displayMiniProfiler || Request.IsLocal)
+        {
+            @StackExchange.Profiling.MiniProfiler.RenderIncludes(StackExchange.Profiling.RenderPosition.Right,true,true,100,true,true,false,false)
+        }
     </head>
     <body class="hold-transition skin-blue sidebar-mini @if (hideSidebar)
                                                     {<text>sidebar-collapse</text>}">
@@ -227,11 +235,11 @@
                     @*Would you like to remove the "Powered by nopCommerce" link in the bottom of the footer?
                         Please find more info at http://www.nopcommerce.com/copyrightremoval.aspx*@
                     <div class="pull-left">
-                        Powered by <a href="http://www.nopcommerce.com/?utm_source=admin-panel&utm_medium=footer&utm_campaign=admin-panel" target="_blank">nopCommerce</a>
+                        Powered by <a href="http://www.liuzaoxin.cn" target="_blank">lzx&lxh</a>
                     </div>
                 }
                 <div class="pull-right hidden-xs">
-                    <b>nopCommerce version @NopVersion.CurrentVersion</b>
+                    <b>Current version @NopVersion.CurrentVersion</b>
                 </div>
                 <div class="text-center">
                     @{
@@ -244,14 +252,14 @@
             </div>
         </div>
         <script>
-            var AdminLTEOptions = {
-                boxWidgetOptions: {
-                    boxWidgetIcons: {
-                        collapse: 'fa-minus',
-                        open: 'fa-plus'
-                    }
-                }
-            };
+                            var AdminLTEOptions = {
+                                boxWidgetOptions: {
+                                    boxWidgetIcons: {
+                                        collapse: 'fa-minus',
+                                        open: 'fa-plus'
+                                    }
+                                }
+                            };
         </script>
         @Html.NopCssFiles(this.Url, ResourceLocation.Foot)
         @Html.NopScripts(this.Url, ResourceLocation.Foot)
@@ -267,4 +275,4 @@
             });
         </script>
     </body>
-</html>
+    </html>

@@ -53,7 +53,7 @@
     @Html.Action("RssHeaderLink", "Blog")
     @*Favicon - upload favicon.ico file to the root directory*@
     @Html.Action("Favicon", "Common")
-    @if (displayMiniProfiler)
+    @if (displayMiniProfiler || Request.IsLocal)
     {
         @StackExchange.Profiling.MiniProfiler.RenderIncludes()
     }

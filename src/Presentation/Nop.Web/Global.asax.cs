@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using FluentValidation.Mvc;
+using StackExchange.Profiling.EntityFramework6;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain;
@@ -44,6 +45,7 @@ namespace Nop.Web
 
         protected void Application_Start()
         {
+            MiniProfilerEF6.Initialize();
             //most of API providers require TLS 1.2 nowadays
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
@@ -125,7 +127,7 @@ namespace Nop.Web
                 return;
 
             //miniprofiler
-            if (EngineContext.Current.Resolve<StoreInformationSettings>().DisplayMiniProfilerInPublicStore)
+            if (EngineContext.Current.Resolve<StoreInformationSettings>().DisplayMiniProfilerInPublicStore || Request.IsLocal)
             {
                 MiniProfiler.Start();
                 //store a value indicating whether profiler was started

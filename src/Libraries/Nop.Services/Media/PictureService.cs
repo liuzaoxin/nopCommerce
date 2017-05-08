@@ -457,6 +457,10 @@ namespace Nop.Services.Media
             string storeLocation = null,
             PictureType defaultPictureType = PictureType.Entity)
         {
+            if (!string.IsNullOrEmpty(_mediaSettings.FileUrlBase))
+            {
+                storeLocation = _mediaSettings.FileUrlBase;
+            }
             string url = string.Empty;
             byte[] pictureBinary = null;
             if (picture != null)

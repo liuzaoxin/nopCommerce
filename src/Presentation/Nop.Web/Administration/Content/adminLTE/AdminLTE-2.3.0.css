@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
+@import url(googleFonts.css); 
 /*!
  *   AdminLTE v2.3.0
  *   Author: Almsaeed Studio
@@ -10,6 +10,9 @@
  * Core: General Layout Style
  * -------------------------
  */
+/* vietnamese */
+
+
 html,
 body {
   min-height: 100%;

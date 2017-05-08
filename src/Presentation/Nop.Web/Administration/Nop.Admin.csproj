@@ -433,6 +433,7 @@
     <Content Include="Content\adminLTE\AdminLTE-2.3.0.css" />
     <Content Include="Content\adminLTE\AdminLTE-2.3.0.min.css" />
     <Content Include="Content\adminLTE\AdminLTE-2.3.0.rtl.css" />
+    <Content Include="Content\adminLTE\googleFonts.css" />
     <Content Include="Content\adminLTE\img\avatar.png" />
     <Content Include="Content\adminLTE\img\avatar04.png" />
     <Content Include="Content\adminLTE\img\avatar2.png" />
@@ -2522,6 +2523,26 @@
     <Content Include="Views\Shared\_GridPagerMessages.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\adminLTE\googlefont\fpTVHK8qsXbIeTHTrnQH6CzM2XYAq8cDhaXsrN8WXcA.woff2" />
+    <Content Include="Content\adminLTE\googlefont\fpTVHK8qsXbIeTHTrnQH6E78GtRp3lhchupCJNw8t58.woff2" />
+    <Content Include="Content\adminLTE\googlefont\fpTVHK8qsXbIeTHTrnQH6GQKuzMuncr0JB710wa2dPI.woff2" />
+    <Content Include="Content\adminLTE\googlefont\fpTVHK8qsXbIeTHTrnQH6Lpx497t94oDua8KfAL9f-E.woff2" />
+    <Content Include="Content\adminLTE\googlefont\fpTVHK8qsXbIeTHTrnQH6MAjkyiewWYrWZc50I8hK7I.woff2" />
+    <Content Include="Content\adminLTE\googlefont\fpTVHK8qsXbIeTHTrnQH6OXKTZYPNtG1yMB_YJSqlic.woff2" />
+    <Content Include="Content\adminLTE\googlefont\M2Jd71oPJhLKp0zdtTvoM40tgx99jmYGv_xzYuwd1rU.woff2" />
+    <Content Include="Content\adminLTE\googlefont\M2Jd71oPJhLKp0zdtTvoM7YHq4FgHI02B8rPccK0FJQ.woff2" />
+    <Content Include="Content\adminLTE\googlefont\M2Jd71oPJhLKp0zdtTvoMxgy2Fsj5sj3EzlXpqVXRKo.woff2" />
+    <Content Include="Content\adminLTE\googlefont\ODelI1aHBYDBqgeIAH2zlC2Q8seG17bfDXYR_jUsrzg.woff2" />
+    <Content Include="Content\adminLTE\googlefont\ODelI1aHBYDBqgeIAH2zlNOAHFN6BivSraYkjhveRHY.woff2" />
+    <Content Include="Content\adminLTE\googlefont\ODelI1aHBYDBqgeIAH2zlNV_2ngZ8dMf8fLgjYEouxg.woff2" />
+    <Content Include="Content\adminLTE\googlefont\toadOcfmlt9b38dHJxOBGClYwVOhDRq2vbpGRTZ7bbs.woff2" />
+    <Content Include="Content\adminLTE\googlefont\toadOcfmlt9b38dHJxOBGCOFnW3Jk0f09zW_Yln67Ac.woff2" />
+    <Content Include="Content\adminLTE\googlefont\toadOcfmlt9b38dHJxOBGDovqjS_dXPZszO_XltPdNg.woff2" />
+    <Content Include="Content\adminLTE\googlefont\toadOcfmlt9b38dHJxOBGDRVvBvQIc1z78c__uoBcyI.woff2" />
+    <Content Include="Content\adminLTE\googlefont\toadOcfmlt9b38dHJxOBGEo0As1BFRXtCDhS66znb_k.woff2" />
+    <Content Include="Content\adminLTE\googlefont\toadOcfmlt9b38dHJxOBGFKFh1TDTPrUZWzVp6FtpG8.woff2" />
+    <Content Include="Content\adminLTE\googlefont\toadOcfmlt9b38dHJxOBGFxe-GPfKKFmiXaJ_Q0GFr8.woff2" />
+    <Content Include="Content\adminLTE\googlefont\toadOcfmlt9b38dHJxOBGOode0-EuMkY--TSyExeINg.woff2" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
   </ItemGroup>

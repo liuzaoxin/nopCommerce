@@ -65,6 +65,12 @@ namespace Nop.Core.Domain.Media
         /// Gets or sets a default quality used for image generation
         /// </summary>
         public int DefaultImageQuality { get; set; }
+
+        /// <summary>
+        /// file base url to UI
+        /// </summary>
+        public string FileUrlBase { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether single (/content/images/thumbs/) or multiple (/content/images/thumbs/001/ and /content/images/thumbs/002/) directories will used for picture thumbs
         /// </summary>
